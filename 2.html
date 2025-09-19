@@ -1,0 +1,3073 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抖阴 - 记录美好生活</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #000;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* 顶部导航 - 减小尺寸 */
+        .header {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 15px; /* 减小内边距 */
+            background: #000;
+            z-index: 100;
+            border-bottom: 1px solid #2f2f2f;
+        }
+        
+        .logo {
+            font-size: 20px; /* 减小字体 */
+            font-weight: bold;
+            background: linear-gradient(45deg, #FE2C55, #25F4EE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .search-icon, .menu-icon {
+            font-size: 18px; /* 减小图标 */
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        /* 返回按钮样式 - 减小尺寸 */
+        .back-btn {
+            display: flex;
+            align-items: center;
+            padding: 6px 15px; /* 减小内边距 */
+            background: #000;
+            border-bottom: 1px solid #2f2f2f;
+            cursor: pointer;
+        }
+        
+        .back-btn i {
+            margin-right: 8px;
+            font-size: 16px; /* 减小图标 */
+        }
+        
+        /* 主选项卡 - 减小尺寸 */
+        .tabs-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            background: #000;
+            border-bottom: 1px solid #2f2f2f;
+        }
+        
+        .tabs-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .tabs {
+            display: inline-flex;
+            padding: 6px 15px; /* 减小内边距 */
+        }
+        
+        .tab {
+            padding: 6px 12px; /* 减小内边距 */
+            font-size: 14px; /* 减小字体 */
+            position: relative;
+            color: #b3b3b3;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        
+        .tab.active {
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 2px; /* 减小下划线 */
+            background: #fff;
+            border-radius: 3px;
+        }
+        
+        /* 内容区域 - 调整底部内边距以适应小导航 */
+        .content {
+            padding: 15px;
+            padding-bottom: 60px; /* 减小底部内边距 */
+        }
+        
+        /* 底部导航 - 缩短宽度并居中 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%; /* 缩短宽度为屏幕的80% */
+            max-width: 320px; /* 设置最大宽度 */
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0; /* 减小内边距 */
+            background: #000;
+            border-top: 1px solid #2f2f2f;
+            border-radius: 20px 20px 0 0; /* 增加顶部圆角 */
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #b3b3b3;
+            font-size: 10px; /* 减小字体 */
+            cursor: pointer;
+        }
+        
+        .nav-item.active {
+            color: #fff;
+        }
+        
+        .nav-icon {
+            font-size: 18px; /* 减小图标 */
+            margin-bottom: 2px; /* 减小间距 */
+        }
+        
+        /* 发布按钮样式 - 修复点击问题 */
+        .publish-btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #b3b3b3;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        
+        .publish-btn {
+            background: linear-gradient(45deg, #FE2C55, #25F4EE);
+            color: white;
+            width: 36px; /* 减小宽度 */
+            height: 36px; /* 减小高度 */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px; /* 减小图标 */
+            cursor: pointer;
+            margin-bottom: 2px;
+            position: relative;
+            top: -15px; /* 向上突出 */
+        }
+        
+        /* 其他原有样式保持不变 */
+        .section-title {
+            color: #fff;
+            margin: 20px 0 15px;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .section-title span {
+            font-size: 14px;
+            color: #aaa;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .category-nav {
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+        
+        .category-title {
+            color: #25F4EE;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .category-title i {
+            margin-right: 8px;
+        }
+        
+        .category-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .category-item {
+            background: #252525;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .category-item:hover {
+            background: #2e2e2e;
+            transform: translateY(-3px);
+        }
+        
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #FE2C55, #25F4EE);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .category-name {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .category-desc {
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .video-card {
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 9/16;
+            background: #333;
+            cursor: pointer;
+        }
+        
+        .video-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        }
+        
+        .video-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .video-author {
+            font-size: 12px;
+            color: #b3b3b3;
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 5px;
+            background: #555;
+            object-fit: cover;
+        }
+        
+        .video-stats {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .video-stats i {
+            margin-right: 4px;
+            color: #fff;
+        }
+        
+        .page {
+            display: none;
+            min-height: calc(100vh - 120px); /* 调整高度以适应小导航 */
+            padding-bottom: 60px; /* 调整底部内边距 */
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @media (max-width: 375px) {
+            .video-title {
+                font-size: 12px;
+            }
+            
+            .tab {
+                font-size: 13px;
+                padding: 6px 10px;
+            }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .loading {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .video-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .player-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .close-player {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: #fff;
+            z-index: 1001;
+            cursor: pointer;
+        }
+        
+        .player-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .sponsor-bar {
+            margin: 12px 15px;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #c8c8c8;
+            background: linear-gradient(90deg,
+                                        rgba(254, 44, 85, .25) 0%,
+                                        rgba(37, 244, 238, .25) 100%);
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 20px;
+            letter-spacing: 1px;
+            backdrop-filter: blur(4px);
+        }
+
+        .sponsor-name {
+            color: #25F4EE;
+            font-weight: 600;
+            text-decoration: none;
+            text-shadow: 0 0 4px rgba(37, 244, 238, .45);
+        }
+        
+        .upload-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .modal-content {
+            background: #252525;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .close-modal {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .upload-area {
+            border: 2px dashed #25F4EE;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            background: #2a2a2a;
+        }
+        
+        .upload-icon {
+            font-size: 40px;
+            color: #25F4EE;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #FE2C55, #25F4EE);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-block;
+            margin: 10px 5px;
+            transition: all 0.3s;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .video-play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            color: white;
+            opacity: 0.8;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .search-page {
+            padding: 15px;
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border-radius: 30px;
+            background: #252525;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(37, 244, 238, 0.5);
+        }
+        
+        .search-input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+        
+        .search-results {
+            margin-top: 20px;
+        }
+        
+        .search-result-item {
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 9/16;
+            background: #333;
+            cursor: pointer;
+        }
+        
+        .message-page {
+            padding: 0;
+        }
+        
+        .message-header {
+            padding: 15px;
+            border-bottom: 1px solid #2f2f2f;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .message-list {
+            list-style: none;
+        }
+        
+        .message-item {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid #2f2f2f;
+            cursor: pointer;
+        }
+        
+        .message-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .message-content {
+            flex: 1;
+        }
+        
+        .message-sender {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .message-preview {
+            color: #aaa;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .message-time {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .chat-container {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            padding: 15px;
+            border-bottom: 1px solid #2f2f2f;
+            display: flex;
+            align-items: center;
+        }
+        
+        .chat-back {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .chat-name {
+            font-weight: 500;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .chat-message {
+            max-width: 70%;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+        }
+        
+        .chat-message.received {
+            background: #252525;
+            align-self: flex-start;
+        }
+        
+        .chat-message.sent {
+            background: linear-gradient(45deg, #FE2C55, #25F4EE);
+            margin-left: auto;
+        }
+        
+        .chat-input-container {
+            padding: 10px 15px;
+            border-top: 1px solid #2f2f2f;
+            display: flex;
+            align-items: center;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            background: #252525;
+            border: none;
+            color: #fff;
+            margin-right: 10px;
+        }
+        
+        .chat-send {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #FE2C55, #25F4EE);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .auth-container {
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .auth-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .auth-form {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .auth-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            background: #252525;
+            border: 1px solid #333;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #FE2C55, #25F4EE);
+            border: none;
+            color: #fff;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .auth-switch {
+            color: #25F4EE;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        #profile-page {
+            padding: 15px;
+        }
+        
+        #my-page {
+            padding: 0;
+        }
+        
+        .profile-header {
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(45deg, #FE2C55, #25F4EE);
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            margin-bottom: 10px;
+        }
+        
+        .profile-name {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-bottom: 1px solid #2f2f2f;
+        }
+        
+        .profile-stat {
+            text-align: center;
+        }
+        
+        .profile-stat-value {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .profile-stat-label {
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid #2f2f2f;
+        }
+        
+        .profile-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+        }
+        
+        .profile-tab.active {
+            color: #25F4EE;
+            border-bottom: 2px solid #25F4EE;
+        }
+        
+        .my-videos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+        
+        .my-video-item {
+            aspect-ratio: 1;
+            position: relative;
+        }
+        
+        .my-video-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .my-video-stats {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            color: #fff;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .my-video-stats i {
+            margin-right: 3px;
+        }
+        
+        .category-page {
+            padding: 0;
+        }
+        
+        .category-page-header {
+            padding: 15px;
+            background: #000;
+            border-bottom: 1px solid #2f2f2f;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .account-actions {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            border-bottom: 1px solid #2f2f2f;
+        }
+        
+        .action-btn {
+            padding: 12px 15px;
+            background: #252525;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: #2e2e2e;
+        }
+        
+        .action-btn i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .no-videos {
+            text-align: center;
+            padding: 40px 20px;
+            color: #aaa;
+        }
+        
+        .no-videos i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #444;
+        }
+        
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        /* 视频播放控制增强样式 */
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 15px 10px 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .player-container:hover .video-controls {
+            opacity: 1;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #FE2C55;
+            border-radius: 3px;
+            width: 0%;
+        }
+
+        .control-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-left, .control-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .play-pause-btn, .volume-btn, .fullscreen-btn {
+            color: white;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .time-display {
+            color: white;
+            font-size: 12px;
+        }
+
+        /* 视频详情页样式 */
+        .video-detail-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .detail-header {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            background: #000;
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+        }
+
+        .detail-back {
+            font-size: 20px;
+            margin-right: 15px;
+        }
+
+        .detail-title {
+            font-size: 18px;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .detail-video-container {
+            width: 100%;
+            background: #000;
+            position: relative;
+        }
+
+        .detail-video {
+            width: 100%;
+            display: block;
+        }
+
+        .detail-info {
+            padding: 15px;
+        }
+
+        .detail-author {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .detail-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .author-name {
+            font-weight: 500;
+        }
+
+        .follow-btn {
+            margin-left: auto;
+            background: #FE2C55;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .detail-description {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .detail-stats {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .detail-stat {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            font-size: 14px;
+        }
+
+        .detail-stat i {
+            margin-right: 5px;
+        }
+
+        .detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .detail-tag {
+            background: #252525;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .related-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 15px 0;
+        }
+
+        /* 搜索历史和热门搜索样式 */
+        .search-history-container {
+            margin-top: 20px;
+        }
+
+        .search-history-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        .clear-history {
+            color: #FE2C55;
+            cursor: pointer;
+        }
+
+        .search-history-list, .hot-searches-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .history-item, .hot-search-item {
+            background: #252525;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .delete-history {
+            color: #aaa;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .hot-search-item {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .hot-search-item::before {
+            content: attr(data-rank);
+            position: absolute;
+            left: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #FE2C55;
+            color: white;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hot-search-item:nth-child(1)::before,
+        .hot-search-item:nth-child(2)::before,
+        .hot-search-item:nth-child(3)::before {
+            background: #FE2C55;
+        }
+
+        .hot-search-item:nth-child(n+4)::before {
+            background: #666;
+        }
+
+        /* 点赞动画 */
+        @keyframes likePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .like-animation {
+            animation: likePulse 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航 -->
+        <div class="header">
+            <div class="logo">抖阴</div>
+            <div class="search-icon" id="search-icon"><i class="fas fa-search"></i></div>
+        </div>
+        
+        <!-- 主选项卡 -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <div class="tab active" data-page="home">推荐</div>
+                <div class="tab" data-page="follow">关注</div>
+                <div class="tab" data-page="friends">VIP专区</div>
+                <div class="tab" data-page="profile">我的</div>
+                <div class="tab" data-page="live">直播</div>
+                <div class="tab" data-page="theater">放映厅</div>
+                <div class="tab" data-page="drama">短剧</div>
+            </div>
+        </div>
+        
+        <!-- 首页内容 -->
+        <div id="home-page" class="page active">
+            <div class="content">
+                <div class="category-nav">
+                    <div class="category-title">
+                        <i class="fas fa-compass"></i>导航
+                    </div>
+                    <div class="category-items">
+                        <div class="category-item" data-category="domestic">
+                            <div class="category-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="category-name">国产专区</div>
+                            <div class="category-desc">精彩国内内容</div>
+                        </div>
+                        
+                        <div class="category-item" data-category="europe-america">
+                            <div class="category-icon">
+                                <i class="fas fa-globe-americas"></i>
+                            </div>
+                            <div class="category-name">欧美专区</div>
+                            <div class="category-desc">西方热门视频</div>
+                        </div>
+                        
+                        <div class="category-item" data-category="japan-korea">
+                            <div class="category-icon">
+                                <i class="fas fa-flag"></i>
+                            </div>
+                            <div class="category-name">日韩专区</div>
+                            <div class="category-desc">东亚美好文化</div>
+                        </div>
+                        
+                        <div class="category-item" data-category="free">
+                            <div class="category-icon">
+                                <i class="fas fa-unlock"></i>
+                            </div>
+                            <div class="category-name">自拍专区</div>
+                            <div class="category-desc">开放创作空间</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 赞助横幅 -->
+                <div class="sponsor-bar">
+                    <span class="sponsor-name">❤️❤️❤️性感王吉祥在线发牌❤️❤️❤️</span> 
+                </div>
+
+                <div class="sponsor-bar">
+                    <span class="sponsor-name">❤️❤️❤️性感唐一凡在线发牌❤️❤️❤️</span> 
+                </div>
+
+                <div class="sponsor-bar">
+                    <span class="sponsor-name">❤️❤️❤️薛氏集团独家赞助播出❤️❤️❤️</span> 
+                </div>
+
+                
+                <div class="section-title">
+                    热门推荐 <span id="more-hot"><i class="fas fa-chevron-right"></i> 更多</span>
+                </div>
+                
+                <div class="video-grid" id="hot-videos">
+                    <!-- 视频卡片 -->
+                    <div class="video-card" data-video="1" data-title="风景如画的地方">
+                        <img class="video-thumb" src="yin/wu.jpg" alt="风景如画的地方">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 2.3w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">风景如画的地方</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar.jpg" alt="头像">
+                                <span>小m</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="2" data-title="舞蹈挑战">
+                        <img class="video-thumb" src="yin/wu1.jpg" alt="舞蹈挑战">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 直播中
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">舞蹈挑战</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar1.jpg" alt="头像">
+                                <span>yum_007</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="3" data-title="自拍挑战">
+                        <img class="video-thumb" src="yin/wu2.jpg" alt="自拍挑战">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 3.7w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">自拍挑战</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar2.jpg" alt="头像">
+                                <span>困困兔</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="4" data-title="日常合集">
+                        <img class="video-thumb" src="yin/wu3.jpg" alt="日常合集">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 4.2w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">日常合集</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar3.jpg" alt="头像">
+                                <span>老湿</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                    为你推荐 <span id="more-recommended"><i class="fas fa-chevron-right"></i> 更多</span>
+                </div>
+                
+                <div class="video-grid" id="recommended-videos">
+                    <div class="video-card" data-video="5" data-title="萌宠日常">
+                        <img class="video-thumb" src="yin/wu4.jpg" alt="萌宠日常">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 直播中
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">萌宠日常</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar4.jpg" alt="头像">
+                                <span>是m不是s</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="6" data-title="健身房的诱惑">
+                        <img class="video-thumb" src="yin/wu5.jpg" alt="健身房的诱惑">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 2.9w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">健身房的诱惑</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar5.jpg" alt="头像">
+                                <span>健身教练</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 关注页面 -->
+        <div id="follow-page" class="page">
+            <div class="content">
+                <div class="section-title">我的关注</div>
+                
+                <div class="video-grid">
+                    <div class="video-card" data-video="7" data-title="我的关注1">
+                        <img class="video-thumb" src="yin/wu6.jpg" alt="我的关注1">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 1.2w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">甜美小喵最新视频</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar6.jpg" alt="头像">
+                                <span>甜美小喵</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="8" data-title="我的关注2">
+                        <img class="video-thumb" src="yin/wu7.jpg" alt="我的关注2">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 2.5w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">每日更新</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar7.jpg" alt="头像">
+                                <span>咬一口兔娘</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- VIP专区页面 -->
+        <div id="friends-page" class="page">
+            <div class="content">
+                <div class="section-title">VIP专属内容</div>
+                
+                <div class="category-nav">
+                    <div class="category-title">
+                        <i class="fas fa-crown"></i> VIP特权
+                    </div>
+                    <div class="category-items">
+                        <div class="category-item">
+                            <div class="category-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="category-name">无限制观看</div>
+                            <div class="category-desc">体验帝王般的生活</div>
+                        </div>
+                        
+                        <div class="category-item">
+                            <div class="category-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="category-name">专属推荐</div>
+                            <div class="category-desc">高品质内容</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="video-grid">
+                    <div class="video-card" data-video="9" data-title="VIP专属1">
+                        <img class="video-thumb" src="yin/wu8.jpg" alt="VIP专属1">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-crown"></i> VIP
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">大哥的定制</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar8.jpg" alt="头像">
+                                <span>VIP创作者: 小仙云儿</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="10" data-title="VIP专属2">
+                        <img class="video-thumb" src="yin/wu9.jpg" alt="VIP专属2">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-crown"></i> VIP
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">可食用</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar9.jpg" alt="头像">
+                                <span>原作者: 不见星空</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 顶部"我的"页面 - 仅显示视频 -->
+        <div id="profile-page" class="page">
+            <div class="content">
+                <div class="section-title">我的视频</div>
+                
+                <div id="my-videos-container">
+                    <!-- 我的视频将在这里动态显示 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部"我"的页面 - 显示用户信息 -->
+        <div id="my-page" class="page">
+            <!-- 未登录状态 -->
+            <div id="profile-unlogged" class="auth-container">
+                <div class="auth-title">登录账号</div>
+                <div class="auth-form">
+                    <input type="text" class="auth-input" id="login-username" placeholder="用户名">
+                    <input type="password" class="auth-input" id="login-password" placeholder="密码">
+                    <button class="auth-btn" id="do-login">登录</button>
+                </div>
+                <div class="auth-switch" id="go-register">没有账号？注册</div>
+                
+                <!-- 注册表单，默认隐藏 -->
+                <div class="auth-form" id="register-form" style="display: none;">
+                    <input type="text" class="auth-input" id="register-username" placeholder="用户名">
+                    <input type="password" class="auth-input" id="register-password" placeholder="密码">
+                    <input type="password" class="auth-input" id="register-confirm" placeholder="确认密码">
+                    <button class="auth-btn" id="do-register">注册</button>
+                </div>
+                <div class="auth-switch" id="go-login" style="display: none;">已有账号？登录</div>
+            </div>
+            
+            <!-- 已登录状态，默认隐藏 -->
+            <div id="profile-logged" style="display: none;">
+                <div class="profile-header">
+                    <img class="profile-avatar" src="yin/avatar.jpg" alt="用户头像">
+                    <div class="profile-name" id="logged-username">用户名</div>
+                    <div>简介：分享生活中的美好瞬间</div>
+                </div>
+                
+                <!-- 账号操作菜单 -->
+                <div class="account-actions">
+                    <div class="action-btn" id="change-password-btn">
+                        <i class="fas fa-key"></i> 修改密码
+                    </div>
+                    <div class="action-btn" id="switch-account-btn">
+                        <i class="fas fa-exchange-alt"></i> 切换账号
+                    </div>
+                    <div class="action-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> 退出登录
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-value" id="my-video-count">0</div>
+                        <div class="profile-stat-label">作品</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">1.2w</div>
+                        <div class="profile-stat-label">粉丝</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-value">356</div>
+                        <div class="profile-stat-label">获赞</div>
+                    </div>
+                </div>
+                
+                <div class="profile-tabs">
+                    <div class="profile-tab active" data-tab="my-videos">我的作品</div>
+                    <div class="profile-tab" data-tab="liked-videos">喜欢</div>
+                    <div class="profile-tab" data-tab="collected-videos">收藏</div>
+                </div>
+                
+                <div id="my-uploaded-videos">
+                    <!-- 我的上传视频将在这里动态显示 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 直播页面 -->
+        <div id="live-page" class="page">
+            <div class="content">
+                <div class="section-title">正在直播</div>
+                
+                <div class="video-grid">
+                    <div class="video-card" data-video="11" data-title="游戏直播">
+                        <img class="video-thumb" src="yin/wu10.jpg" alt="游戏直播">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-eye"></i> 1.2w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">猜你喜欢</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar10.jpg" alt="头像">
+                                <span>幸酱</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="12" data-title="美食直播">
+                        <img class="video-thumb" src="yin/wu11.jpg" alt="美食直播">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-eye"></i> 8.5k
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">别站外面了,进来看看吧</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar11.jpg" alt="头像">
+                                <span>云吞</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 放映厅页面 -->
+        <div id="theater-page" class="page">
+            <div class="content">
+                <div class="section-title">热门影片</div>
+                
+                <div class="video-grid">
+                    <div class="video-card" data-video="13" data-title="热门电影1">
+                        <img class="video-thumb" src="yin/wu12.jpg" alt="热门电影1">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-star"></i> 9.2
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">金瓶梅</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar12.jpg" alt="头像">
+                                <span>三级电影频道</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="14" data-title="热门电影2">
+                        <img class="video-thumb" src="yin/wu13.jpg" alt="热门电影2">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-star"></i> 8.7
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">妈妈的朋友</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar13.jpg" alt="头像">
+                                <span>韩国电影</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 短剧页面 -->
+        <div id="drama-page" class="page">
+            <div class="content">
+                <div class="section-title">热门短剧</div>
+                
+                <div class="video-grid">
+                    <div class="video-card" data-video="15" data-title="热门短剧1">
+                        <img class="video-thumb" src="yin/wu14.jpg" alt="热门短剧1">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 5.2w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">继父的逆袭</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar14.jpg" alt="头像">
+                                <span>免费短剧</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="16" data-title="热门短剧2">
+                        <img class="video-thumb" src="yin/wu15.jpg" alt="热门短剧2">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 3.7w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">恰好的意外</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar15.jpg" alt="头像">
+                                <span>快手抖音精选短剧</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 短视频页面 -->
+        <div id="short-video-page" class="page">
+            <div class="content">
+                <div class="section-title">热门短视频</div>
+                
+                <div class="video-grid">
+                    <div class="video-card" data-video="17" data-title="搞笑短视频">
+                        <img class="video-thumb" src="yin/wu16.jpg" alt="搞笑短视频">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 12.5w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">喜欢大的</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar16.jpg" alt="头像">
+                                <span>小mg</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-card" data-video="18" data-title="技巧短视频">
+                        <img class="video-thumb" src="yin/wu17.jpg" alt="技巧短视频">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> 8.3w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">又是一地水</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar17.jpg" alt="头像">
+                                <span>小嫂货</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 消息页面 -->
+        <div id="message-page" class="page message-page">
+            <div class="message-header">消息</div>
+            <ul class="message-list">
+                <li class="message-item" data-contact="1">
+                    <img class="message-avatar" src="yin/avatar18.jpg" alt="联系人1">
+                    <div class="message-content">
+                        <div class="message-sender">小美</div>
+                        <div class="message-preview">你的视频很有趣！</div>
+                    </div>
+                    <div class="message-time">10:23</div>
+                </li>
+                <li class="message-item" data-contact="2">
+                    <img class="message-avatar" src="yin/avatar19.jpg" alt="联系人2">
+                    <div class="message-content">
+                        <div class="message-sender">叫MM</div>
+                        <div class="message-preview">关注你很久了</div>
+                    </div>
+                    <div class="message-time">昨天</div>
+                </li>
+                <li class="message-item" data-contact="3">
+                    <img class="message-avatar" src="yin/avatar20.jpg" alt="联系人3">
+                    <div class="message-content">
+                        <div class="message-sender">系统通知</div>
+                        <div class="message-preview">你的视频获得了推荐</div>
+                    </div>
+                    <div class="message-time">3天前</div>
+                </li>
+            </ul>
+            
+            <!-- 聊天界面，默认隐藏 -->
+            <div class="chat-container" id="chat-container">
+                <div class="chat-header">
+                    <div class="chat-back" id="chat-back"><i class="fas fa-arrow-left"></i></div>
+                    <div class="chat-name" id="chat-contact-name"></div>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <!-- 聊天内容会动态生成 -->
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="输入消息...">
+                    <div class="chat-send" id="chat-send">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 搜索页面 -->
+        <div id="search-page" class="page">
+            <div class="search-page">
+                <div class="search-container">
+                    <i class="fas fa-search search-input-icon"></i>
+                    <input type="text" class="search-input" id="search-input" placeholder="搜索视频、用户...">
+                </div>
+                
+                <!-- 搜索历史 -->
+                <div class="search-history-container">
+                    <div class="search-history-title">
+                        <span>搜索历史</span>
+                        <span class="clear-history" id="clear-history">清除历史</span>
+                    </div>
+                    <div class="search-history-list" id="search-history-list">
+                        <!-- 搜索历史会动态生成 -->
+                    </div>
+                    
+                    <div class="search-history-title">
+                        <span>热门搜索</span>
+                    </div>
+                    <div class="hot-searches-list" id="hot-searches-list">
+                        <!-- 热门搜索会动态生成 -->
+                    </div>
+                </div>
+                
+                <div class="video-grid search-results" id="search-results">
+                    <!-- 搜索结果会动态生成，使用与推荐视频相同的网格布局 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 更多热门推荐页面 -->
+        <div id="more-hot-page" class="page">
+            <div class="back-btn" id="back-from-hot">
+                <i class="fas fa-arrow-left"></i> 返回
+            </div>
+            <div class="content">
+                <div class="section-title">热门推荐</div>
+                
+                <div class="video-grid" id="more-hot-videos">
+                    <!-- 这里会显示所有热门视频 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 更多为你推荐页面 -->
+        <div id="more-recommended-page" class="page">
+            <div class="back-btn" id="back-from-recommended">
+                <i class="fas fa-arrow-left"></i> 返回
+            </div>
+            <div class="content">
+                <div class="section-title">为你推荐</div>
+                
+                <div class="video-grid" id="more-recommended-videos">
+                    <!-- 这里会显示所有推荐视频 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 专区页面 -->
+        <div id="category-page" class="page category-page">
+            <div class="back-btn" id="back-from-category">
+                <i class="fas fa-arrow-left"></i> 返回
+            </div>
+            <div class="category-page-header" id="category-page-title">
+                专区内容
+            </div>
+            <div class="content">
+                <div class="video-grid" id="category-videos">
+                    <!-- 专区视频内容 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 视频详情页 -->
+        <div class="video-detail-page" id="video-detail-page">
+            <div class="detail-header">
+                <div class="detail-back" id="detail-back"><i class="fas fa-arrow-left"></i></div>
+                <div class="detail-title" id="detail-video-title">视频标题</div>
+            </div>
+            
+            <div class="detail-video-container">
+                <video class="detail-video" id="detail-video" controls></video>
+                <div class="video-controls">
+                    <div class="progress-container" id="detail-progress-container">
+                        <div class="progress-bar" id="detail-progress-bar"></div>
+                    </div>
+                    <div class="control-buttons">
+                        <div class="control-left">
+                            <button class="play-pause-btn" id="detail-play-pause"><i class="fas fa-play"></i></button>
+                            <button class="volume-btn" id="detail-volume"><i class="fas fa-volume-up"></i></button>
+                            <span class="time-display" id="detail-time">0:00 / 0:00</span>
+                        </div>
+                        <div class="control-right">
+                            <button class="fullscreen-btn" id="detail-fullscreen"><i class="fas fa-expand"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="detail-info">
+                <div class="detail-author">
+                    <img class="detail-avatar" id="detail-avatar" src="" alt="作者头像">
+                    <div>
+                        <div class="author-name" id="detail-author-name"></div>
+                        <div style="font-size: 12px; color: #aaa;">1.2w 粉丝</div>
+                    </div>
+                    <button class="follow-btn" id="follow-btn">关注</button>
+                </div>
+                
+                <div class="detail-description" id="detail-description">
+                    视频描述内容将在这里显示...
+                </div>
+                
+                <div class="detail-stats">
+                    <div class="detail-stat like-btn" id="detail-like">
+                        <i class="fas fa-heart"></i>
+                        <span id="detail-like-count">0</span>
+                    </div>
+                    <div class="detail-stat comment-btn">
+                        <i class="fas fa-comment"></i>
+                        <span>234</span>
+                    </div>
+                    <div class="detail-stat share-btn">
+                        <i class="fas fa-share"></i>
+                        <span>分享</span>
+                    </div>
+                </div>
+                
+                <div class="detail-tags" id="detail-tags">
+                    <!-- 标签将在这里显示 -->
+                </div>
+                
+                <div class="related-title">相关推荐</div>
+                <div class="video-grid" id="related-videos">
+                    <!-- 相关视频将在这里显示 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item active" data-page="home">
+                <div class="nav-icon"><i class="fas fa-home"></i></div>
+                <span>首页</span>
+            </div>
+            <div class="nav-item" data-page="short-video">
+                <div class="nav-icon"><i class="fas fa-fire"></i></div>
+                <span>短视频</span>
+            </div>
+            <div class="publish-btn-container" id="publish-btn">
+                <div class="publish-btn">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <span>发布</span>
+            </div>
+            <div class="nav-item" data-page="message">
+                <div class="nav-icon"><i class="fas fa-comment"></i></div>
+                <span>消息</span>
+            </div>
+            <div class="nav-item" data-page="my">
+                <div class="nav-icon"><i class="fas fa-user"></i></div>
+                <span>我</span>
+            </div>
+        </div>
+        
+        <!-- 上传模态框 -->
+        <div class="upload-modal" id="upload-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">上传视频</div>
+                    <div class="close-modal" id="close-modal">&times;</div>
+                </div>
+                
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <p>点击或拖拽视频到这里</p>
+                    <p class="note">支持MP4、MOV格式，最大100MB</p>
+                </div>
+                <input type="file" id="file-input" accept="video/*" style="display: none;">
+                
+                <div style="margin-bottom: 15px;">
+                    <input type="text" class="auth-input" id="video-title-input" placeholder="请输入视频标题">
+                    <textarea class="auth-input" id="video-description-input" placeholder="请输入视频描述" rows="3"></textarea>
+                    <input type="text" class="auth-input" id="video-tags-input" placeholder="请输入标签，用逗号分隔">
+                </div>
+                
+                <button class="btn" id="confirm-upload"><i class="fas fa-check"></i> 确认上传</button>
+            </div>
+        </div>
+        
+        <!-- 视频播放器 -->
+        <div class="video-player" id="video-player">
+            <div class="player-container">
+                <div class="close-player" id="close-player">
+                    <i class="fas fa-times"></i>
+                </div>
+                <video class="player-video" id="player-video" controls></video>
+            </div>
+        </div>
+        
+        <!-- 修改密码模态框 -->
+        <div class="password-modal" id="password-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">修改密码</div>
+                    <div class="close-modal" id="close-password-modal">&times;</div>
+                </div>
+                
+                <div class="auth-form">
+                    <input type="password" class="auth-input" id="current-password" placeholder="当前密码">
+                    <input type="password" class="auth-input" id="new-password" placeholder="新密码">
+                    <input type="password" class="auth-input" id="confirm-password" placeholder="确认新密码">
+                    <button class="btn" id="save-password"><i class="fas fa-save"></i> 保存修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 存储所有视频数据，增加了更详细的信息
+        const allVideos = [
+            { 
+                id: 1, 
+                title: "风景如画的地方", 
+                author: "小m", 
+                likes: "2.3w", 
+                thumb: "yin/wu.jpg",
+                videoUrl: "videos/guo.mp4",
+                description: "分享一个我偶然发现的绝美风景地，真的太治愈了！#旅行 #风景 #治愈",
+                tags: ["旅行", "风景", "治愈"],
+                avatar: "yin/avatar.jpg",
+                comments: 128
+            },
+            { 
+                id: 2, 
+                title: "舞蹈挑战", 
+                author: "yum_007", 
+                likes: "直播中", 
+                thumb: "yin/wu1.jpg",
+                videoUrl: "videos/guo1.mp4",
+                description: "参加了最近很火的舞蹈挑战，练习了好久，希望大家喜欢！#舞蹈 #挑战 #流行",
+                tags: ["舞蹈", "挑战", "流行"],
+                avatar: "yin/avatar1.jpg",
+                comments: 356
+            },
+            { 
+                id: 3, 
+                title: "自拍挑战", 
+                author: "困困兔", 
+                likes: "3.7w", 
+                thumb: "yin/wu2.jpg",
+                videoUrl: "videos/video3.mp4",
+                description: "今天来尝试一下这个自拍挑战，大家觉得怎么样？#自拍 #挑战 #日常",
+                tags: ["自拍", "挑战", "日常"],
+                avatar: "yin/avatar2.jpg",
+                comments: 215
+            },
+            { 
+                id: 4, 
+                title: "日常合集", 
+                author: "老湿", 
+                likes: "4.2w", 
+                thumb: "yin/wu3.jpg",
+                videoUrl: "videos/video4.mp4",
+                description: "一周日常合集，记录生活中的小确幸 #日常 #生活 #vlog",
+                tags: ["日常", "生活", "vlog"],
+                avatar: "yin/avatar3.jpg",
+                comments: 421
+            },
+            { 
+                id: 5, 
+                title: "萌宠日常", 
+                author: "是m不是s", 
+                likes: "直播中", 
+                thumb: "yin/wu4.jpg",
+                videoUrl: "videos/video5.mp4",
+                description: "我家猫咪的日常，太可爱了！#萌宠 #猫咪 #搞笑",
+                tags: ["萌宠", "猫咪", "搞笑"],
+                avatar: "yin/avatar4.jpg",
+                comments: 532
+            },
+            { 
+                id: 6, 
+                title: "健身房的诱惑", 
+                author: "健身教练", 
+                likes: "2.9w", 
+                thumb: "yin/wu5.jpg",
+                videoUrl: "videos/video6.mp4",
+                description: "分享几个高效健身动作，在家也能练 #健身 #运动 #健康",
+                tags: ["健身", "运动", "健康"],
+                avatar: "yin/avatar5.jpg",
+                comments: 189
+            },
+            { id: 7, title: "关注的博主1", author: "关注的博主", likes: "1.2w", thumb: "yin/wu6.jpg", videoUrl: "videos/video7.mp4", description: "关注的博主最新视频内容", tags: ["日常"], avatar: "yin/avatar6.jpg", comments: 98 },
+            { id: 8, title: "关注的博主2", author: "日常博主", likes: "2.5w", thumb: "yin/wu7.jpg", videoUrl: "videos/video8.mp4", description: "每日更新的日常生活", tags: ["日常", "生活"], avatar: "yin/avatar7.jpg", comments: 256 },
+            { id: 9, title: "VIP专属1", author: "VIP创作者", likes: "VIP", thumb: "yin/wu8.jpg", videoUrl: "videos/video9.mp4", description: "VIP专享内容，感谢支持", tags: ["VIP", "专属"], avatar: "yin/avatar8.jpg", comments: 143 },
+            { id: 10, title: "VIP专属2", author: "特邀创作者", likes: "VIP", thumb: "yin/wu9.jpg", videoUrl: "videos/video10.mp4", description: "会员专享精品内容", tags: ["VIP", "精品"], avatar: "yin/avatar9.jpg", comments: 207 },
+            { id: 11, title: "游戏直播", author: "游戏主播", likes: "1.2w", thumb: "yin/wu10.jpg", videoUrl: "videos/video11.mp4", description: "王者荣耀排位赛直播精彩瞬间", tags: ["游戏", "直播", "王者荣耀"], avatar: "yin/avatar10.jpg", comments: 654 },
+            { id: 12, title: "美食直播", author: "美食达人", likes: "8.5k", thumb: "yin/wu11.jpg", videoUrl: "videos/video12.mp4", description: "家常菜教学，简单易学", tags: ["美食", "烹饪", "家常菜"], avatar: "yin/avatar11.jpg", comments: 321 },
+            { id: 13, title: "热门电影1", author: "电影频道", likes: "9.2", thumb: "yin/wu12.jpg", videoUrl: "videos/video13.mp4", description: "高分电影推荐，值得一看", tags: ["电影", "推荐", "高分"], avatar: "yin/avatar12.jpg", comments: 489 },
+            { id: 14, title: "热门电影2", author: "经典影院", likes: "8.7", thumb: "yin/wu13.jpg", videoUrl: "videos/video14.mp4", description: "经典影片回顾，回味无穷", tags: ["电影", "经典", "回顾"], avatar: "yin/avatar13.jpg", comments: 367 },
+            { id: 15, title: "热门短剧1", author: "短剧工作室", likes: "5.2w", thumb: "yin/wu14.jpg", videoUrl: "videos/video15.mp4", description: "都市爱情故事，精彩不断", tags: ["短剧", "爱情", "都市"], avatar: "yin/avatar14.jpg", comments: 782 },
+            { id: 16, title: "热门短剧2", author: "悬疑剧场", likes: "3.7w", thumb: "yin/wu15.jpg", videoUrl: "videos/video16.mp4", description: "悬疑推理系列，烧脑剧情", tags: ["短剧", "悬疑", "推理"], avatar: "yin/avatar15.jpg", comments: 543 },
+            { id: 17, title: "搞笑短视频", author: "搞笑达人", likes: "12.5w", thumb: "yin/wu16.jpg", videoUrl: "videos/video17.mp4", description: "每日一笑，开心就好", tags: ["搞笑", "幽默", "短视频"], avatar: "yin/avatar16.jpg", comments: 987 },
+            { id: 18, title: "技巧短视频", author: "生活小能手", likes: "8.3w", thumb: "yin/wu17.jpg", videoUrl: "videos/video18.mp4", description: "生活小技巧，实用又方便", tags: ["生活", "技巧", "实用"], avatar: "yin/avatar17.jpg", comments: 432 }
+        ];
+        
+        // 存储用户上传的视频
+        let userUploadedVideos = [];
+        let nextVideoId = 301; // 用于生成新视频ID
+        
+        // 专区视频数据
+        const categoryVideos = {
+            'domestic': [
+                { id: 21, title: "国内风光", author: "旅行家", likes: "5.3w", thumb: "yin/wu18.jpg", videoUrl: "videos/video21.mp4", description: "中国最美的十大风景地", tags: ["旅行", "国内", "风光"], avatar: "yin/avatar18.jpg", comments: 623 },
+                { id: 22, title: "传统文化", author: "文化使者", likes: "3.7w", thumb: "yin/wu19.jpg", videoUrl: "videos/video22.mp4", description: "探寻中国传统文化之美", tags: ["文化", "传统", "中国"], avatar: "yin/avatar19.jpg", comments: 345 },
+                { id: 23, title: "城市生活", author: "城市猎人", likes: "4.2w", thumb: "yin/wu20.jpg", videoUrl: "videos/video23.mp4", description: "大城市的日常生活记录", tags: ["城市", "生活", "日常"], avatar: "yin/avatar20.jpg", comments: 512 },
+                { id: 24, title: "乡村故事", author: "田园生活", likes: "2.8w", thumb: "yin/wu21.jpg", videoUrl: "videos/video24.mp4", description: "美丽乡村的真实生活", tags: ["乡村", "生活", "自然"], avatar: "yin/avatar21.jpg", comments: 289 }
+            ],
+            'europe-america': [
+                { id: 31, title: "纽约街头", author: "海外游子", likes: "3.5w", thumb: "yin/wu22.jpg", videoUrl: "videos/video31.mp4", description: "纽约街头的繁华与喧嚣", tags: ["旅行", "美国", "城市"], avatar: "yin/avatar22.jpg", comments: 421 },
+                { id: 32, title: "巴黎风光", author: "旅行摄影", likes: "4.1w", thumb: "yin/wu23.jpg", videoUrl: "videos/video32.mp4", description: "浪漫巴黎的城市风光", tags: ["旅行", "法国", "浪漫"], avatar: "yin/avatar23.jpg", comments: 532 },
+                { id: 33, title: "美国公路", author: "自驾达人", likes: "2.9w", thumb: "yin/wu24.jpg", videoUrl: "videos/video33.mp4", description: "美国西部公路自驾游", tags: ["旅行", "自驾", "美国"], avatar: "yin/avatar24.jpg", comments: 312 },
+                { id: 34, title: "伦敦日常", author: "留学生活", likes: "3.2w", thumb: "yin/wu25.jpg", videoUrl: "videos/video34.mp4", description: "伦敦留学生的日常生活", tags: ["留学", "英国", "生活"], avatar: "yin/avatar25.jpg", comments: 389 }
+            ],
+            'japan-korea': [
+                { id: 41, title: "东京街景", author: "日韩旅行", likes: "4.7w", thumb: "yin/wu26.jpg", videoUrl: "videos/video41.mp4", description: "东京街头的独特风景", tags: ["旅行", "日本", "城市"], avatar: "yin/avatar26.jpg", comments: 643 },
+                { id: 42, title: "首尔美食", author: "吃货探店", likes: "5.2w", thumb: "yin/wu27.jpg", videoUrl: "videos/video42.mp4", description: "首尔必吃的美食推荐", tags: ["美食", "韩国", "首尔"], avatar: "yin/avatar27.jpg", comments: 721 },
+                { id: 43, title: "京都文化", author: "文化探索", likes: "3.8w", thumb: "yin/wu28.jpg", videoUrl: "videos/video43.mp4", description: "京都的传统文化体验", tags: ["文化", "日本", "京都"], avatar: "yin/avatar28.jpg", comments: 456 },
+                { id: 44, title: "济州岛风光", author: "海岛旅行", likes: "4.3w", thumb: "yin/wu29.jpg", videoUrl: "videos/video44.mp4", description: "济州岛的美丽海滩", tags: ["旅行", "韩国", "海岛"], avatar: "yin/avatar29.jpg", comments: 589 }
+            ],
+            'free': [
+                { id: 51, title: "日常vlog", author: "生活记录", likes: "2.3w", thumb: "yin/wu30.jpg", videoUrl: "videos/video51.mp4", description: "记录我的日常生活点滴", tags: ["vlog", "日常", "生活"], avatar: "yin/avatar30.jpg", comments: 321 },
+                { id: 52, title: "才艺展示", author: "多才多艺", likes: "3.1w", thumb: "yin/wu31.jpg", videoUrl: "videos/video52.mp4", description: "给大家展示一下我的小才艺", tags: ["才艺", "表演", "技能"], avatar: "yin/avatar31.jpg", comments: 432 },
+                { id: 53, title: "旅行日记", author: "背包客", likes: "4.5w", thumb: "yin/wu32.jpg", videoUrl: "videos/video53.mp4", description: "我的背包旅行日记", tags: ["旅行", "背包客", "冒险"], avatar: "yin/avatar32.jpg", comments: 654 },
+                { id: 54, title: "美食制作", author: "家常菜", likes: "3.7w", thumb: "yin/wu33.jpg", videoUrl: "videos/video54.mp4", description: "简单美味的家常菜制作", tags: ["美食", "烹饪", "家常菜"], avatar: "yin/avatar33.jpg", comments: 489 }
+            ]
+        };
+        
+        // 专区名称映射
+        const categoryNames = {
+            'domestic': '国产专区',
+            'europe-america': '欧美专区',
+            'japan-korea': '日韩专区',
+            'free': '自拍专区'
+        };
+        
+        // 热门搜索词 - 根据需求更新
+        const hotSearches = [
+            "热门挑战", "热舞合集", "姐姐", "兄妹", "自拍偷拍", "抖音合集"
+        ];
+        
+        // 存储搜索历史
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+        
+        // 页面切换功能
+        function switchPage(pageId, fromPage = null) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 显示目标页面
+            document.getElementById(`${pageId}-page`).classList.add('active');
+            
+            // 更新顶部选项卡状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.page === pageId) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // 更新底部导航状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === pageId) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // 记录来源页面，用于返回功能
+            if (fromPage) {
+                currentFromPage = fromPage;
+            }
+            
+            // 如果是"我的"页面，刷新视频列表
+            if (pageId === 'my' || pageId === 'profile') {
+                refreshUserVideos();
+            }
+            
+            // 如果是搜索页面，显示搜索历史和热门搜索
+            if (pageId === 'search') {
+                displaySearchHistory();
+                displayHotSearches();
+            }
+            
+            // 如果是更多热门推荐页面，加载内容
+            if (pageId === 'more-hot') {
+                loadMoreHotVideos();
+            }
+            
+            // 如果是更多为你推荐页面，加载内容
+            if (pageId === 'more-recommended') {
+                loadMoreRecommendedVideos();
+            }
+        }
+        
+        // 加载更多热门推荐视频
+        function loadMoreHotVideos() {
+            const container = document.getElementById('more-hot-videos');
+            container.innerHTML = '';
+            
+            // 添加更多热门视频，使用连续编号的图片
+            for (let i = 6; i <= 14; i++) {
+                const videoId = i + 4; // 从10开始
+                container.innerHTML += `
+                    <div class="video-card" data-video="${videoId}" data-title="热门视频${i}">
+                        <img class="video-thumb" src="yin/wu${i + 5}.jpg" alt="热门视频${i}">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> ${(Math.random() * 5 + 1).toFixed(1)}w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">热门视频${i}</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar${i + 5}.jpg" alt="头像">
+                                <span>创作者${i}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 为新添加的视频卡片绑定点击事件
+            attachVideoClickEvents();
+        }
+        
+        // 加载更多为你推荐视频
+        function loadMoreRecommendedVideos() {
+            const container = document.getElementById('more-recommended-videos');
+            container.innerHTML = '';
+            
+            // 添加更多推荐视频，使用连续编号的图片
+            for (let i = 15; i <= 24; i++) {
+                const videoId = i + 10;
+                container.innerHTML += `
+                    <div class="video-card" data-video="${videoId}" data-title="推荐视频${i - 14}">
+                        <img class="video-thumb" src="yin/wu${i + 5}.jpg" alt="推荐视频${i - 14}">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> ${(Math.random() * 5 + 1).toFixed(1)}w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">推荐视频${i - 14}</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="yin/avatar${i + 5}.jpg" alt="头像">
+                                <span>创作者${i - 14}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 为新添加的视频卡片绑定点击事件
+            attachVideoClickEvents();
+        }
+        
+        // 当前来源页面，用于返回功能
+        let currentFromPage = 'home';
+        
+        // 顶部选项卡点击事件
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const pageId = this.dataset.page;
+                switchPage(pageId);
+            });
+        });
+        
+        // 底部导航点击事件
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const pageId = this.dataset.page;
+                if (pageId) { // 发布按钮没有pageId
+                    switchPage(pageId);
+                    
+                    // 如果点击的是"我"的页面，检查登录状态
+                    if (pageId === 'my') {
+                        checkLoginStatus();
+                    }
+                }
+            });
+        });
+        
+        // 更多热门推荐点击事件
+        document.getElementById('more-hot').addEventListener('click', function() {
+            switchPage('more-hot', 'home');
+        });
+        
+        // 从更多热门推荐返回
+        document.getElementById('back-from-hot').addEventListener('click', function() {
+            switchPage(currentFromPage);
+        });
+        
+        // 更多为你推荐点击事件
+        document.getElementById('more-recommended').addEventListener('click', function() {
+            switchPage('more-recommended', 'home');
+        });
+        
+        // 从更多为你推荐返回
+        document.getElementById('back-from-recommended').addEventListener('click', function() {
+            switchPage(currentFromPage);
+        });
+        
+        // 搜索功能
+        const searchIcon = document.getElementById('search-icon');
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        const searchHistoryList = document.getElementById('search-history-list');
+        const hotSearchesList = document.getElementById('hot-searches-list');
+        const clearHistoryBtn = document.getElementById('clear-history');
+        
+        // 打开搜索页面
+        searchIcon.addEventListener('click', function() {
+            switchPage('search');
+            // 聚焦搜索框
+            setTimeout(() => {
+                searchInput.focus();
+            }, 100);
+        });
+        
+        // 显示搜索历史
+        function displaySearchHistory() {
+            if (searchHistory.length === 0) {
+                searchHistoryList.innerHTML = '<div style="color: #aaa; font-size: 14px;">暂无搜索历史</div>';
+                return;
+            }
+            
+            let historyHTML = '';
+            searchHistory.forEach(item => {
+                historyHTML += `
+                    <div class="history-item">
+                        <span>${item}</span>
+                        <span class="delete-history" data-item="${item}"><i class="fas fa-times"></i></span>
+                    </div>
+                `;
+            });
+            
+            searchHistoryList.innerHTML = historyHTML;
+            
+            // 添加删除历史记录事件
+            document.querySelectorAll('.delete-history').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const item = this.dataset.item;
+                    searchHistory = searchHistory.filter(h => h !== item);
+                    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+                    displaySearchHistory();
+                });
+            });
+            
+            // 添加点击历史记录进行搜索事件
+            document.querySelectorAll('.history-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const keyword = this.querySelector('span:first-child').textContent;
+                    searchInput.value = keyword;
+                    performSearch(keyword);
+                });
+            });
+        }
+        
+        // 显示热门搜索
+        function displayHotSearches() {
+            let hotHTML = '';
+            hotSearches.forEach((search, index) => {
+                hotHTML += `
+                    <div class="hot-search-item" data-rank="${index + 1}">
+                        ${search}
+                    </div>
+                `;
+            });
+            
+            hotSearchesList.innerHTML = hotHTML;
+            
+            // 添加点击热门搜索进行搜索事件
+            document.querySelectorAll('.hot-search-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const keyword = this.textContent.trim();
+                    searchInput.value = keyword;
+                    performSearch(keyword);
+                });
+            });
+        }
+        
+        // 清除搜索历史
+        clearHistoryBtn.addEventListener('click', function() {
+            if (confirm('确定要清除所有搜索历史吗？')) {
+                searchHistory = [];
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+                displaySearchHistory();
+            }
+        });
+        
+        // 执行搜索
+        function performSearch(keyword) {
+            // 添加到搜索历史（去重并限制数量）
+            if (keyword.trim() !== '') {
+                // 先移除已存在的相同关键词
+                searchHistory = searchHistory.filter(item => item.toLowerCase() !== keyword.toLowerCase());
+                // 添加到开头
+                searchHistory.unshift(keyword);
+                // 限制最多10条历史记录
+                if (searchHistory.length > 10) {
+                    searchHistory.pop();
+                }
+                // 保存到本地存储
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            }
+            
+            // 隐藏搜索历史和热门搜索
+            document.querySelector('.search-history-container').style.display = 'none';
+            // 显示搜索结果容器
+            searchResults.style.display = 'grid';
+            
+            // 过滤包含关键词的视频
+            const matchedVideos = allVideos.filter(video => 
+                video.title.toLowerCase().includes(keyword.toLowerCase()) || 
+                video.author.toLowerCase().includes(keyword.toLowerCase()) ||
+                video.tags.some(tag => tag.toLowerCase().includes(keyword.toLowerCase()))
+            );
+            
+            if (matchedVideos.length === 0) {
+                searchResults.innerHTML = '<div style="grid-column: span 2; text-align: center; padding: 20px; color: #aaa;">没有找到相关视频</div>';
+                return;
+            }
+            
+            // 显示搜索结果，使用与推荐视频相同的样式
+            let resultsHTML = '';
+            matchedVideos.forEach(video => {
+                resultsHTML += `
+                    <div class="video-card" data-video="${video.id}" data-title="${video.title}">
+                        <img class="video-thumb" src="${video.thumb}" alt="${video.title}">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> ${video.likes}
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">${video.title}</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="${video.avatar}" alt="头像">
+                                <span>${video.author}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            searchResults.innerHTML = resultsHTML;
+            
+            // 为搜索结果添加点击事件
+            attachVideoClickEvents();
+        }
+        
+        // 搜索输入事件
+        searchInput.addEventListener('input', function() {
+            const keyword = this.value.trim();
+            
+            // 显示搜索历史和热门搜索，隐藏搜索结果
+            document.querySelector('.search-history-container').style.display = 'block';
+            searchResults.style.display = 'none';
+            
+            if (keyword.length === 0) {
+                return;
+            }
+            
+            // 执行搜索
+            performSearch(keyword);
+        });
+        
+        // 消息功能
+        const messageItems = document.querySelectorAll('.message-item');
+        const messageList = document.querySelector('.message-list');
+        const chatContainer = document.getElementById('chat-container');
+        const chatBack = document.getElementById('chat-back');
+        const chatContactName = document.getElementById('chat-contact-name');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        
+        // 存储聊天记录
+        const chatHistory = {
+            1: [
+                { sender: 'other', text: '你的视频很有趣！' },
+                { sender: 'me', text: '谢谢支持！' }
+            ],
+            2: [
+                { sender: 'other', text: '关注你很久了' },
+                { sender: 'me', text: '感谢关注！' }
+            ],
+            3: [
+                { sender: 'other', text: '你的视频获得了推荐' },
+                { sender: 'me', text: '太好了！' }
+            ]
+        };
+        
+        // 联系人名称
+        const contactNames = {
+            1: '小美',
+            2: '叫姐姐',
+            3: '系统通知'
+        };
+        
+        // 点击消息进入聊天界面
+        messageItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const contactId = this.dataset.contact;
+                chatContactName.textContent = contactNames[contactId];
+                
+                // 显示聊天记录
+                showChatHistory(contactId);
+                
+                // 隐藏消息列表，显示聊天界面
+                messageList.style.display = 'none';
+                chatContainer.style.display = 'flex';
+            });
+        });
+        
+        // 返回消息列表
+        chatBack.addEventListener('click', function() {
+            chatContainer.style.display = 'none';
+            messageList.style.display = 'block';
+        });
+        
+        // 发送消息
+        chatSend.addEventListener('click', function() {
+            sendMessage();
+        });
+        
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message === '') return;
+            
+            // 获取当前聊天对象
+            const currentContact = Object.keys(contactNames).find(key => 
+                contactNames[key] === chatContactName.textContent
+            );
+            
+            if (currentContact) {
+                // 添加到聊天记录
+                chatHistory[currentContact].push({
+                    sender: 'me',
+                    text: message
+                });
+                
+                // 显示更新后的聊天记录
+                showChatHistory(currentContact);
+                
+                // 清空输入框
+                chatInput.value = '';
+                
+                // 模拟对方回复
+                setTimeout(() => {
+                    chatHistory[currentContact].push({
+                        sender: 'other',
+                        text: '收到你的消息了'
+                    });
+                    showChatHistory(currentContact);
+                }, 1000);
+            }
+        }
+        
+        function showChatHistory(contactId) {
+            chatMessages.innerHTML = '';
+            
+            chatHistory[contactId].forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${msg.sender === 'me' ? 'sent' : 'received'}`;
+                messageDiv.textContent = msg.text;
+                chatMessages.appendChild(messageDiv);
+            });
+            
+            // 滚动到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 登录注册功能
+        const goRegister = document.getElementById('go-register');
+        const goLogin = document.getElementById('go-login');
+        const loginForm = document.querySelector('.auth-form:not(#register-form)');
+        const registerForm = document.getElementById('register-form');
+        const doLogin = document.getElementById('do-login');
+        const doRegister = document.getElementById('do-register');
+        const profileUnlogged = document.getElementById('profile-unlogged');
+        const profileLogged = document.getElementById('profile-logged');
+        const loggedUsername = document.getElementById('logged-username');
+        
+        // 示例账号
+        const demoAccounts = [
+            { username: 'user1', password: '123456' },
+            { username: 'user2', password: '654321' }
+        ];
+        
+        // 当前登录用户
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        
+        // 切换到注册表单
+        goRegister.addEventListener('click', function() {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            goRegister.style.display = 'none';
+            goLogin.style.display = 'block';
+        });
+        
+        // 切换到登录表单
+        goLogin.addEventListener('click', function() {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            goLogin.style.display = 'none';
+            goRegister.style.display = 'block';
+        });
+        
+        // 登录功能
+        doLogin.addEventListener('click', function() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            // 检查是否是示例账号
+            const user = demoAccounts.find(acc => acc.username === username && acc.password === password);
+            
+            if (user) {
+                // 登录成功
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                loggedUsername.textContent = username;
+                profileUnlogged.style.display = 'none';
+                profileLogged.style.display = 'block';
+                alert('登录成功');
+                refreshUserVideos();
+            } else if (username && password) {
+                // 非示例账号也允许登录
+                currentUser = { username, password };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                loggedUsername.textContent = username;
+                profileUnlogged.style.display = 'none';
+                profileLogged.style.display = 'block';
+                alert('登录成功');
+                refreshUserVideos();
+            } else {
+                alert('请输入用户名和密码');
+            }
+        });
+        
+        // 注册功能
+        doRegister.addEventListener('click', function() {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+            
+            if (!username || !password || !confirm) {
+                alert('请填写所有字段');
+                return;
+            }
+            
+            if (password !== confirm) {
+                alert('两次密码输入不一致');
+                return;
+            }
+            
+            // 检查用户名是否已存在
+            const userExists = demoAccounts.some(acc => acc.username === username);
+            if (userExists) {
+                alert('用户名已存在');
+                return;
+            }
+            
+            // 注册成功，添加到账号列表并自动登录
+            const newUser = { username, password };
+            demoAccounts.push(newUser);
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            loggedUsername.textContent = username;
+            profileUnlogged.style.display = 'none';
+            profileLogged.style.display = 'block';
+            alert('注册成功');
+            refreshUserVideos();
+        });
+        
+        // 检查登录状态
+        function checkLoginStatus() {
+            // 从本地存储获取用户信息
+            currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+            
+            if (currentUser) {
+                profileUnlogged.style.display = 'none';
+                profileLogged.style.display = 'block';
+                loggedUsername.textContent = currentUser.username;
+            } else {
+                profileUnlogged.style.display = 'flex';
+                profileLogged.style.display = 'none';
+            }
+        }
+        
+        // 账号操作功能
+        document.getElementById('change-password-btn').addEventListener('click', function() {
+            document.getElementById('password-modal').style.display = 'flex';
+        });
+        
+        document.getElementById('close-password-modal').addEventListener('click', function() {
+            document.getElementById('password-modal').style.display = 'none';
+        });
+        
+        document.getElementById('save-password').addEventListener('click', function() {
+            const currentPwd = document.getElementById('current-password').value;
+            const newPwd = document.getElementById('new-password').value;
+            const confirmPwd = document.getElementById('confirm-password').value;
+            
+            if (currentUser && currentPwd !== currentUser.password) {
+                alert('当前密码不正确');
+                return;
+            }
+            
+            if (newPwd !== confirmPwd) {
+                alert('两次输入的新密码不一致');
+                return;
+            }
+            
+            if (newPwd.length < 6) {
+                alert('密码长度不能少于6位');
+                return;
+            }
+            
+                       // 更新密码
+            currentUser.password = newPwd;
+            const userIndex = demoAccounts.findIndex(acc => acc.username === currentUser.username);
+            if (userIndex !== -1) {
+                demoAccounts[userIndex].password = newPwd;
+            }
+            
+            alert('密码修改成功');
+            passwordModal.style.display = 'none';
+            
+            // 清空输入框
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+        });
+        
+        // 切换账号
+        switchAccountBtn.addEventListener('click', function() {
+            if (confirm('确定要切换账号吗？')) {
+                // 退出当前账号
+                currentUser = null;
+                checkLoginStatus();
+                // 清空输入框
+                document.getElementById('login-username').value = '';
+                document.getElementById('login-password').value = '';
+                document.getElementById('register-username').value = '';
+                document.getElementById('register-password').value = '';
+                document.getElementById('register-confirm').value = '';
+                // 切换到登录表单
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                goLogin.style.display = 'none';
+                goRegister.style.display = 'block';
+            }
+        });
+        
+        // 退出登录
+        logoutBtn.addEventListener('click', function() {
+            if (confirm('确定要退出登录吗？')) {
+                currentUser = null;
+                checkLoginStatus();
+                // 清空输入框
+                document.getElementById('login-username').value = '';
+                document.getElementById('login-password').value = '';
+                // 切换到登录表单
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                goLogin.style.display = 'none';
+                goRegister.style.display = 'block';
+            }
+        });
+        
+        // 个人中心选项卡切换
+        document.querySelectorAll('.profile-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // 视频播放功能
+        const videoPlayer = document.getElementById('video-player');
+        const playerVideo = document.getElementById('player-video');
+        const closePlayer = document.getElementById('close-player');
+        
+        // 为视频卡片添加点击事件
+        function attachVideoClickEvents() {
+    document.querySelectorAll('.video-card').forEach(card => {
+        card.addEventListener('click', function () {
+            const videoId = this.dataset.video;
+            const video = allVideos.find(v => v.id == videoId);
+            if (video) openVideoDetail(video);
+                });
+            });
+        }
+        
+        function openVideoDetail(video) {
+            document.getElementById('detail-video-title').textContent = video.title;
+            document.getElementById('detail-video').src = video.videoUrl;
+            document.getElementById('detail-description').textContent = video.description;
+            document.getElementById('detail-author-name').textContent = video.author;
+            document.getElementById('detail-avatar').src = video.avatar;
+            document.getElementById('detail-like-count').textContent = video.likes;
+            document.getElementById('detail-tags').innerHTML =
+                video.tags.map(t => `<span class="detail-tag">#${t}</span>`).join('');
+            document.getElementById('video-detail-page').style.display = 'block';
+        }
+        // 初始绑定视频点击事件
+        attachVideoClickEvents();
+        
+        // 关闭播放器
+        closePlayer.addEventListener('click', function() {
+            videoPlayer.style.display = 'none';
+            playerVideo.pause();
+        });
+
+        // 全屏播放器返回按钮
+        document.getElementById('close-player').addEventListener('click', () => {
+            document.getElementById('video-player').style.display = 'none';
+            document.getElementById('player-video').pause();
+        });
+        
+        // 上传功能
+        const publishBtn = document.getElementById('publish-btn');
+        const uploadModal = document.getElementById('upload-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const confirmUploadBtn = document.getElementById('confirm-upload');
+        
+        // 打开上传模态框
+        publishBtn.addEventListener('click', function() {
+            // 检查登录状态
+            if (!currentUser) {
+                alert('请先登录');
+                switchPage('my');
+                return;
+            }
+            
+            uploadModal.style.display = 'flex';
+        });
+        
+        // 关闭上传模态框
+        closeModalBtn.addEventListener('click', function() {
+            uploadModal.style.display = 'none';
+        });
+        
+        // 点击上传区域触发文件选择
+        uploadArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        // 拖放功能
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.style.background = '#2a2a2a';
+        });
+        
+        uploadArea.addEventListener('dragleave', function() {
+            uploadArea.style.background = '';
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.style.background = '';
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleVideoUpload(fileInput.files[0]);
+            }
+        });
+        
+        // 文件选择事件
+        fileInput.addEventListener('change', function() {
+            if (this.files.length) {
+                handleVideoUpload(this.files[0]);
+            }
+        });
+        
+        // 确认上传
+        confirmUploadBtn.addEventListener('click', function() {
+            if (fileInput.files.length) {
+                handleVideoUpload(fileInput.files[0]);
+                uploadModal.style.display = 'none';
+                alert('视频上传成功！已添加到您的视频列表。');
+                // 清空文件输入
+                fileInput.value = '';
+                // 刷新视频列表
+                refreshUserVideos();
+            } else {
+                alert('请先选择视频文件');
+            }
+        });
+        
+        // 处理视频上传
+        function handleVideoUpload(file) {
+            if (!file || !file.type.match('video.*')) {
+                alert('请选择视频文件');
+                return;
+            }
+            
+            // 检查文件大小（最大100MB）
+            if (file.size > 100 * 1024 * 1024) {
+                alert('视频文件太大，请选择小于100MB的文件');
+                return;
+            }
+            
+            // 创建新视频对象
+            const newVideo = {
+                id: nextVideoId++,
+                title: file.name.split('.').slice(0, -1).join('.'), // 从文件名提取标题
+                author: currentUser.username,
+                likes: "0",
+                thumb: `https://picsum.photos/200/350?random=${nextVideoId}`,
+                videoUrl: URL.createObjectURL(file),   // ⬅️本地预览 // 随机缩略图
+                file: file // 实际应用中可能需要保存文件信息
+            };
+            
+            // 添加到用户上传的视频列表
+            userUploadedVideos.push(newVideo);
+            
+            console.log('视频上传成功:', newVideo);
+        }
+        
+        // 刷新用户视频列表
+        function refreshUserVideos() {
+            const myVideosContainer = document.getElementById('my-videos-container');
+            const myUploadedContainer = document.getElementById('my-uploaded-videos');
+            const videoCountElement = document.getElementById('my-video-count');
+            
+            // 更新视频计数
+            videoCountElement.textContent = userUploadedVideos.length;
+            
+            // 如果没有上传视频，显示提示信息
+            if (userUploadedVideos.length === 0) {
+                myVideosContainer.innerHTML = `
+                    <div class="no-videos">
+                        <i class="fas fa-video"></i>
+                        <p>你还没有上传任何视频</p>
+                        <p>点击底部"发布"按钮上传第一个视频吧</p>
+                    </div>
+                `;
+                
+                myUploadedContainer.innerHTML = `
+                    <div class="no-videos">
+                        <i class="fas fa-video"></i>
+                        <p>你还没有上传任何视频</p>
+                        <p>点击底部"发布"按钮上传第一个视频吧</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 有上传视频，显示视频列表
+            let videosHTML = '';
+            userUploadedVideos.forEach(video => {
+                videosHTML += `
+                    <div class="video-card" data-video="${video.id}" data-title="${video.title}">
+                        <img class="video-thumb" src="${video.thumb}" alt="${video.title}">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> ${video.likes}
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">${video.title}</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="https://picsum.photos/50/50?random=200" alt="我的头像">
+                                <span>${video.author}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            myVideosContainer.innerHTML = `<div class="video-grid">${videosHTML}</div>`;
+            
+            // 个人主页的视频网格布局不同
+            let profileVideosHTML = '';
+            userUploadedVideos.forEach(video => {
+                profileVideosHTML += `
+                    <div class="my-video-item">
+                        <img class="my-video-thumb" src="${video.thumb}" alt="${video.title}">
+                        <div class="my-video-stats">
+                            <i class="fas fa-heart"></i> ${video.likes}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            myUploadedContainer.innerHTML = `<div class="my-videos">${profileVideosHTML}</div>`;
+            
+            // 绑定视频点击事件
+            attachVideoClickEvents();
+        }
+        
+        // 更多热门推荐页面
+        document.getElementById('more-hot').addEventListener('click', function() {
+            // 显示更多热门推荐
+            const moreHotPage = document.getElementById('more-hot-videos');
+            moreHotPage.innerHTML = '';
+            
+            // 复制热门视频到更多页面
+            const hotVideos = document.getElementById('hot-videos').innerHTML;
+            moreHotPage.innerHTML = hotVideos;
+            
+            // 添加新的热门视频
+            for (let i = 7; i <= 12; i++) {
+                moreHotPage.innerHTML += `
+                    <div class="video-card" data-video="${i}" data-title="热门视频${i}">
+                        <img class="video-thumb" src="https://picsum.photos/200/350?random=${i}" alt="热门视频${i}">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> ${(Math.random() * 5 + 1).toFixed(1)}w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">热门视频${i}</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="https://picsum.photos/50/50?random=${i+100}" alt="头像">
+                                <span>创作者${i}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            switchPage('more-hot', 'home');
+            attachVideoClickEvents();
+        });
+        
+        // 更多为你推荐页面
+        document.getElementById('more-recommended').addEventListener('click', function() {
+            // 显示更多为你推荐
+            const moreRecommendedPage = document.getElementById('more-recommended-videos');
+            moreRecommendedPage.innerHTML = '';
+            
+            // 复制为你推荐视频到更多页面
+            const recommendedVideos = document.getElementById('recommended-videos').innerHTML;
+            moreRecommendedPage.innerHTML = recommendedVideos;
+            
+            // 添加新的推荐视频
+            for (let i = 13; i <= 20; i++) {
+                moreRecommendedPage.innerHTML += `
+                    <div class="video-card" data-video="${i}" data-title="推荐视频${i}">
+                        <img class="video-thumb" src="https://picsum.photos/200/350?random=${i}" alt="推荐视频${i}">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats">
+                            <i class="fas fa-heart"></i> ${(Math.random() * 5 + 1).toFixed(1)}w
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">推荐视频${i}</div>
+                            <div class="video-author">
+                                <img class="author-avatar" src="https://picsum.photos/50/50?random=${i+100}" alt="头像">
+                                <span>创作者${i}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            switchPage('more-recommended', 'home');
+            attachVideoClickEvents();
+        });
+        
+        // 专区页面返回按钮
+        document.getElementById('back-from-category').addEventListener('click', function() {
+            switchPage(currentFromPage);
+        });
+        
+        // 热门推荐返回按钮
+        document.getElementById('back-from-hot').addEventListener('click', function() {
+            switchPage(currentFromPage);
+        });
+        
+        // 为你推荐返回按钮
+        document.getElementById('back-from-recommended').addEventListener('click', function() {
+            switchPage(currentFromPage);
+        });
+        
+        // 使用事件委托绑定专区点击事件
+        document.querySelector('.category-items').addEventListener('click', function (e) {
+            const item = e.target.closest('.category-item');
+            if (!item) return;
+
+            const category = item.dataset.category;
+            const categoryTitle = item.querySelector('.category-name').textContent;
+
+            document.getElementById('category-page-title').textContent = categoryTitle;
+            const container = document.getElementById('category-videos');
+            container.innerHTML = '';
+
+            categoryVideos[category].forEach(v => {
+                container.innerHTML += `
+                    <div class="video-card" data-video="${v.id}" data-title="${v.title}">
+                        <img class="video-thumb" src="${v.thumb}">
+                        <div class="video-play-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="video-stats"><i class="fas fa-heart"></i> ${v.likes}</div>
+                        <div class="video-title">${v.title}</div>
+                        <div class="video-author">
+                            <img class="author-avatar" src="https://picsum.photos/50/50?random=${v.id + 100}">
+                            <span>${v.author}</span>
+                        </div>
+                    </div>`;
+            });
+
+            switchPage('category', 'home');
+        });
+
+        window.addEventListener('DOMContentLoaded', checkLoginStatus);
+        
+        // 视频详情页返回按钮
+        document.getElementById('detail-back').addEventListener('click', () => {
+            document.getElementById('video-detail-page').style.display = 'none';
+            document.getElementById('detail-video').pause();  // 停止播放
+        });
+
+        // 确保静态视频卡片也能点击
+        attachVideoClickEvents();
+
+        // 初始化页面
+        refreshUserVideos();
+    </script>
+
+    <!-- 加载动画 -->
+    <div class="loading-overlay" id="loading">
+        <i class="fas fa-spinner fa-spin fa-3x" style="color: #25F4EE;"></i>
+    </div>
+</body>
+</html>
